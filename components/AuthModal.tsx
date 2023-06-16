@@ -22,7 +22,7 @@ const AuthModal = () => {
       router.refresh();
       onClose();
     }
-  });
+  },[session,router,onClose]);
   return (
     <Modal
       title="Welcome back"

@@ -1,18 +1,31 @@
 "use client";
-
+import{toast} from 'react-hot-toast'
 import { twMerge } from "tailwind-merge";
 import { useRouter } from "next/navigation";
 import { RxCaretLeft, RxCaretRight } from "react-icons/rx";
 import { HiHome } from "react-icons/hi";
 import { BiSearch } from "react-icons/bi";
 import Button from "./Button";
+import { useUser } from "@/hooks/useUser";
+import useAuthModal from "@/hooks/useAuthModal";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+
 interface HeaderProps {
   children: React.ReactNode;
   className?: string;
 }
 const Header: React.FC<HeaderProps> = ({ children, className }) => {
   const router = useRouter();
-  const handleLogout = () => {};
+  const {user}=useUser();
+  const authModal=useAuthModal();
+  const supabaseClient=useSupabaseClient();
+  const handleLogout =async () => {
+    const {error}=await supabaseClient.auth.signOut();
+    router.refresh();
+    if(error){
+      toast.error(error.message);
+    }
+  };
   return (
     <div
       className={twMerge(
@@ -40,29 +53,39 @@ const Header: React.FC<HeaderProps> = ({ children, className }) => {
           </button>
         </div>
         <div className="flex md:hidden gap-x-2 items-center">
-          <button className="rounded-full p-2 bg-white flex items-center justify-center hover:opacity-75">
+          <button onClick={()=>router.push('/')} className="rounded-full p-2 bg-white flex items-center justify-center hover:opacity-75">
             <HiHome size={20} className="text-black" />
           </button>
-          <button className="rounded-full p-2 bg-white flex items-center justify-center hover:opacity-75">
+          <button onClick={()=>router.push('/search')} className="rounded-full p-2 bg-white flex items-center justify-center hover:opacity-75">
             <BiSearch size={20} className="text-black" />
           </button>
         </div>
         
         <div className="flex justify-between items-center gap-x-4">
-          <>
+          {user?(
+            <div className="flex gap-x-4 items-center">
+             <Button onClick={handleLogout}
+             className='bg-white px-6 py-2'>
+             Logout
+             </Button>
+            </div>
+          ):(
+            <>
             <div>
-            <Button onClick={()=>{}} className="bg-transparent text-neutral-300 font-medium">
+            <Button onClick={authModal.onOpen} className="bg-transparent text-neutral-300 font-medium">
               Sign up
             </Button>
             
             </div>
             <div>
-            <Button onClick={()=>{}} className="bg-white px-6 py-2">
+            <Button onClick={authModal.onOpen} className="bg-white px-6 py-2">
               Login
             </Button>
             
             </div>
           </>
+          )}
+          
         </div>
       </div>
       {children}
