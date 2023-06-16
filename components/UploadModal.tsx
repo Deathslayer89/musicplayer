@@ -9,7 +9,9 @@ import { useUser } from "@/hooks/useUser";
 import { toast } from "react-hot-toast";
 import uniqid from 'uniqid'
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { useRouter } from "next/navigation";
 const UploadModal = () => {
+  const router =useRouter();
   const uploadModal = useUploadModal();
   const supabaseClient=useSupabaseClient();
   const [isLoading, setIsLoading] = useState(false);
@@ -64,6 +66,11 @@ const UploadModal = () => {
         if(supabaseError){
             return toast.error(supabaseError.message)
         }
+        router.refresh();
+        setIsLoading(false);
+        toast.success('song created!');
+        reset();
+        uploadModal.onClose();
     }
     catch(error){
         toast.error('something went wrong')
@@ -98,19 +105,20 @@ const UploadModal = () => {
           <div className="pb-1">
             select a song file
           </div>
-            <Input
+            <input
             disabled={isLoading}
             type="file"
             accept=".mp3"
             id="song"
             {...register('song',{required:true})}
             />
+            
         </div>
         <div>
           <div className="pb-1">
             select a image file
           </div>
-            <Input
+            <input
               id="image"
               type="file"
               disabled={isLoading}
