@@ -4,6 +4,7 @@ import Image from 'next/image'
 import {FaPlay} from 'react-icons/fa'
 import { useUser } from "@/hooks/useUser";
 import useAuthModal from "@/hooks/useAuthModal";
+import useSubscribeModal from "@/hooks/useSubscribeModal";
 interface ListItemProps{
     image:string;
     name:string;
@@ -14,12 +15,16 @@ const ListItem:React.FC<ListItemProps> = ({
     name,href
 }) => {
     const router=useRouter();
-    const user=useUser();
+    const {user,subscription}=useUser();
     const authModal=useAuthModal();
+    const subscribeModal=useSubscribeModal();
     const onClick=()=>{
 
         if(!user){
             return authModal.onOpen();
+        }
+        if(!subscription){
+            return subscribeModal.onOpen()
         }
         router.push(href);
     }
