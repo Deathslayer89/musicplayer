@@ -16,6 +16,7 @@ const UploadModal = () => {
   const supabaseClient=useSupabaseClient();
   const [isLoading, setIsLoading] = useState(false);
   const user=useUser();
+  
   const { register, handleSubmit, reset } = useForm<FieldValues>({
     defaultValues: {
       author: "",
@@ -57,7 +58,7 @@ const UploadModal = () => {
             return toast.error('Failed image upload')
         }
         const {error:supabaseError}=await supabaseClient.from('songs').insert({
-            user_id:user.id,
+            user_id:user?.user?.id,
             title:values.title,
             author:values.author,
             image_path:imageData.path,
