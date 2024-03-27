@@ -1,13 +1,17 @@
-import getLikedSongs from "@/actions/getLikedSongs";
 import Image from "next/image";
-import Header from '@/components/Header'
-import LikedContent from './components/LikedContent'
-export const revalidate=0;
-const Liked = async () => {
-    const songs=await getLikedSongs();
 
-    return (
-        <div 
+import getLikedSongs from "@/actions/getLikedSongs";
+import Header from "@/components/Header";
+
+import LikedContent from "./components/LikedContent";
+
+export const revalidate = 0;
+
+const Liked = async () => {
+  const songs = await getLikedSongs();
+
+  return (
+    <div 
       className="
         bg-neutral-900 
         rounded-lg 
@@ -32,7 +36,7 @@ const Liked = async () => {
               <Image
                 className="object-cover"
                 fill
-                src="/liked.jpg"
+                src="/images/liked.png"
                 alt="Playlist"
               />
             </div>
@@ -57,7 +61,7 @@ const Liked = async () => {
       </Header>
       <LikedContent songs={songs} />
     </div>
-      );
+  );
 }
- 
+
 export default Liked;

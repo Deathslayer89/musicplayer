@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useUser } from "@/hooks/useUser";
 import Button from "@/components/Button";
 import useSubscribeModal from "@/hooks/useSubscribeModal";
-import { postData } from "@/lib/helpers";
+import { postData } from "@/libs/helpers";
 
 const AccountContent = () => {
   const router = useRouter();
