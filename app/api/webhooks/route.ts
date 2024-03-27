@@ -1,12 +1,13 @@
 import Stripe from 'stripe';
 import { NextResponse } from 'next/server';
 import { headers } from 'next/headers';
-import { stripe } from '@/lib/stripe';
+
+import { stripe } from '@/libs/stripe';
 import {
   upsertProductRecord,
   upsertPriceRecord,
   manageSubscriptionStatusChange
-} from '@/lib/supabaseAdmin';
+} from '@/libs/supabaseAdmin';
 
 const relevantEvents = new Set([
   'product.created',
@@ -79,5 +80,6 @@ export async function POST(
       return new NextResponse('Webhook error: "Webhook handler failed. View logs."', { status: 400 });
     }
   }
+
   return NextResponse.json({ received: true }, { status: 200 });
 };
